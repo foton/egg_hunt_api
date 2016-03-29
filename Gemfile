@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails'
 gem 'pg' #PostgreSQL
-
+gem 'has_secure_token' #for auth token generation; will be included in Rails 5
 #gem 'active_type'  #not yet used, but may be VERY usefull
 
 group :development, :test do
