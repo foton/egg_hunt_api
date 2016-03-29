@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 admin:
-  email: admin@emial.cz
+  email: admin@email.cz
   token: pX27zsMN2ViQKta1bGfLmVJE
   admin: true
 

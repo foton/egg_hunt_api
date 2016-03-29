@@ -32,6 +32,12 @@ class UserTest < ActiveSupport::TestCase
     refute @other_user.valid?
   end  
 
+  test "User: do not allow token duplicates" do
+    assert @other_user.valid?
+    @other_user.token = @common_user.token
+    refute @other_user.valid?
+  end 
+
   test "User: create token if not present" do
     user=User.new(email: "my@email.cz")
     user.save!
@@ -39,22 +45,17 @@ class UserTest < ActiveSupport::TestCase
   end
     
   test "User: can assign authorized_attributes for admin" do
-    atts=@common_user.authorized_attributes_for( User.new(admin: true) )
+    atts=User.authorized_attributes_for( User.new(admin: true) )
     assert_equal [:email, :admin], atts
   end  
 
-  test "User: can assign authorized_attributes for user itself" do
-    atts=@common_user.authorized_attributes_for( @common_user )
-    assert_equal [], atts
-  end  
-
-  test "User: can assign authorized_attributes for another user" do
-    atts=@common_user.authorized_attributes_for( @other_user )
+  test "User: can assign authorized_attributes for common user" do
+    atts=User.authorized_attributes_for( @common_user )
     assert_equal [], atts
   end  
 
   test "User: can assign authorized_attributes for guest" do
-    atts=@common_user.authorized_attributes_for( nil )
+    atts=User.authorized_attributes_for( nil )
     assert_equal [], atts
   end  
 end

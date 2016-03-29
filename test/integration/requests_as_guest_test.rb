@@ -100,10 +100,11 @@ class RequestsAsGuestTest < ActionDispatch::IntegrationTest
 
 #  describe "Users request" do
     test "Guest cannot list users"
-    test "Guest cannot view user"
+    test "Guest cannot view other user"
+    test "Guest can view his/her own profile"
     test "Guest cannot create user"
-    test "Guest cannot update user"
+    test "Guest cannot update other user"
+    test "Guest can update his/her profile"
     test "Guest cannot delete user"
-#  end  
-
+ #end   
 end

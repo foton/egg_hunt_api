@@ -39,3 +39,12 @@ eggs can be searched by creation time (with :newest :limit)
 egg have picture? , location, size (austrich, chicken, ant), time of placing
 
 location may be hidden to guest, or not.
+
+ssl only
+token access (Oauth?)
+Etag or Last-Modified fo caching
+
+Content-Type defines the request format.
+Accept defines a list of acceptable response formats.
+
+Hypermedia as the Engine of Application State is a principle that hypertext links should be used to create a better navigation through the API.

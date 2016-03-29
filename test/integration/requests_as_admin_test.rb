@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'authentication_helper' 
+require 'support/authentication_helper' 
 
 class RequestsAsAdminTest < ActionDispatch::IntegrationTest
   include AuthHelper
