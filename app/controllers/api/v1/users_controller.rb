@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Api::V1::UsersController < ApplicationController
   
   def index
     load_users
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
       new_r = @user.new_record?
       headers ={}
       if @user.save
-        headers= ( new_r ? {status: :created, location: user_url(:id => @user.id) } : {status: :ok} )
+        headers= ( new_r ? {status: :created, location: api_v1_user_url(:id => @user.id) } : {status: :ok} )
       end   
       respond_with(@user, headers)
     end

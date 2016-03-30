@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'support/authentication_helper' 
 
-class UsersControllerTest < ActionController::TestCase
+class Api::V1::UsersControllerTest < ActionController::TestCase
   include ControllersAuthHelper
 
   def setup

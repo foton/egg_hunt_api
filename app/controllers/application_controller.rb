@@ -79,7 +79,14 @@ class ApplicationController < ActionController::Base
   private
     def authenticate_user
       self.current_user=nil
-      authenticate_with_http_token do |token, options|
+      if request.authorization.present?
+        if ActionController::HttpAuthentication::Basic.auth_scheme(request).downcase.strip == "token"
+          token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
+        else  
+          username, password = ActionController::HttpAuthentication::Basic.user_name_and_password(request) 
+          token=username
+        end  
+
         usr=User.find_by_token(token)
         if usr.nil? #we have nonexisting token 
           request_http_token_authentication
@@ -87,7 +94,8 @@ class ApplicationController < ActionController::Base
         else  
           self.current_user=usr
         end  
-      end
+
+      end  
       true #always return true, for guest current_user is nil
     end
     

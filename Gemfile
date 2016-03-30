@@ -15,6 +15,8 @@ group :development, :test do
 
   #managing secrets
   gem 'dotenv-rails' #loads secrets from.env file into ENV variables (which are then used in config.secrets.yml)
+
+  gem "thin" #understands SSL in development
 end
 
 group :development do

@@ -48,3 +48,17 @@ Content-Type defines the request format.
 Accept defines a list of acceptable response formats.
 
 Hypermedia as the Engine of Application State is a principle that hypertext links should be used to create a better navigation through the API.
+
+
+Make SSL Development server (OS console)
+
+#generate certificate (self-signed) 
+IMPORTANT: 'Common Name: localhost.ssl' 
+
+openssl req -new -newkey rsa:2048 -sha1 -days 365 -nodes -x509 -keyout server.key -out server.crt
+
+#add url for localhost to your hosts
+echo "127.0.0.1 localhost.ssl" | sudo tee -a /etc/hosts
+
+#run thin for HTTPS on port 3000
+bundle exec thin start --ssl --ssl-verify --ssl-key-file server.key --ssl-cert-file server.crt
