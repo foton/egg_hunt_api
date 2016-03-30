@@ -1,8 +1,6 @@
-require 'test_helper'
-require 'support/authentication_helper' 
+require_relative 'api_controller_test'
 
-class Api::V1::UsersControllerTest < ActionController::TestCase
-  include ControllersAuthHelper
+class Api::V1::UsersControllerTest < Api::V1::ApiControllerTest
 
   def setup
 	 @accessed_user=users(:bunny2)
@@ -86,7 +84,7 @@ class Api::V1::UsersControllerTest < ActionController::TestCase
 
     user=assigns(:user)
     assert user.persisted?
-    refute_equal "my_Token_Here", user.token  #token should not be created manually
+    assert_equal "my_Token_Here", user.token  #token can be created manually
     assert_equal "my@email.cz" , user.email
     assert user.admin?
     assert_equal user_count+1, User.count
@@ -105,6 +103,20 @@ class Api::V1::UsersControllerTest < ActionController::TestCase
     assert_equal "my2@email.cz" , user.email
     refute user.admin?
     assert_equal user_count+1, User.count
+  end
+
+
+  test "do not let admins do create not valid user" do
+    user_count=User.count
+    set_current_user(users(:admin))
+    
+    post :create, {user: {email: "my2email.cz", token: "", admin: false}, format: :json}
+
+    assert_response :unprocessable_entity
+    user=assigns(:user)
+    refute user.errors.empty?
+    refute user.persisted?
+    assert_equal user_count, User.count
   end
   
   test "let admins do update by PUT" do
@@ -125,16 +137,44 @@ class Api::V1::UsersControllerTest < ActionController::TestCase
     user_count=User.count
     set_current_user(users(:admin))
     
-    assert_allowed_to_do(:patch, :update, :admin , {id: @accessed_user.id, user: {email: "my@email.cz", token: "my_Token_Here", admin: false}})
+    assert_allowed_to_do(:patch, :update, :admin , {id: @accessed_user.id, user: {email: "my@email.cz", token: "my_Token_Here2_very_long", admin: false}})
     
     user=assigns(:user)
     assert user.persisted?
     assert_equal "my@email.cz" , user.email
-    refute_equal "my_Token_Here", user.token  #token should not be created manually
+    refute_equal "my_Token_Here2", user.token  #token can changed manually
     refute user.admin?
     assert_equal user_count, User.count
   end
+
+  test "let admins regenerate token" do
+    user_count=User.count
+    set_current_user(users(:admin))
+    old_token=@accessed_user.token
+    
+    assert_allowed_to_do(:patch, :update, :admin , {id: @accessed_user.id, user: {token: ""}})
+    
+    user=assigns(:user)
+    assert user.persisted?
+    assert (user.token.length == 24)
+    refute_equal old_token, user.token 
+    assert_equal user_count, User.count
+  end
   
+  test "let admins regenerate token with REGENERATE" do
+    user_count=User.count
+    set_current_user(users(:admin))
+    old_token=@accessed_user.token
+    
+    assert_allowed_to_do(:patch, :update, :admin , {id: @accessed_user.id, user: {token: "regenerate"}})
+    
+    user=assigns(:user)
+    assert user.persisted?
+    assert (user.token.length == 24)
+    refute_equal old_token, user.token 
+    assert_equal user_count, User.count
+  end
+
   test "let admins do delete" do
     user_count=User.count
     set_current_user(users(:admin))
@@ -147,14 +187,14 @@ class Api::V1::UsersControllerTest < ActionController::TestCase
 
   private
     def assert_kicked_off(method, action, role, params={})
-    	send(method, action, params.merge({format: :json}))
+    	send(method, action, params.merge({format: api_format}))
       assert_response :forbidden, "Call '#{method} #{action}' by :#{role} was not kicked off "
       assert assigns(:users).nil?, "Call '#{method} #{action}' by :#{role} set users!"
       assert assigns(:user).nil?, "Call '#{method} #{action}' by :#{role} set user!"
     end 	
 
     def assert_allowed_to_do(method, action, role, params={})
-      send(method, action, params.merge({format: :json}))
+      send(method, action, params.merge({format: api_format}))
       case action
       when :index
          assert_response :ok, "Response to call '#{method} #{action}' by :#{role} was not :ok"        

@@ -41,12 +41,18 @@ class UserTest < ActiveSupport::TestCase
   test "User: create token if not present" do
     user=User.new(email: "my@email.cz")
     user.save!
-    assert (user.token.to_s.length > 10), "Token '#{user.token.to_s}' is small"
+    assert (user.token.to_s.length == 24), "Token '#{user.token.to_s}' is not 24 chars long"
+   
+    token1=user.token
+    user.token=User::TOKEN_FOR_REGENERATE
+    user.save!
+    assert (user.token.to_s.length == 24), "Token '#{user.token.to_s}' is not 24 chars long" 
+    refute_equal token1, user.token
   end
     
   test "User: can assign authorized_attributes for admin" do
     atts=User.authorized_attributes_for( User.new(admin: true) )
-    assert_equal [:email, :admin], atts
+    assert_equal [:email, :token, :admin], atts
   end  
 
   test "User: can assign authorized_attributes for common user" do

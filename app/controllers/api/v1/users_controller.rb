@@ -38,7 +38,14 @@ class Api::V1::UsersController < ApplicationController
     end  
 
     def load_users
-      @users ||= user_scope.to_a
+      unless defined?(@users)
+        @users=user_scope
+        sort_users
+        filter_users
+        limit_users
+        restrict_fields
+      end  
+      @users
     end
 
     def load_user
@@ -68,6 +75,65 @@ class Api::V1::UsersController < ApplicationController
       User.all
     end
 
+    #set sorting according to param "sort=-email,+admin" , "sort=+email", "sort=email"
+    def sort_users
+      if params[:sort].present?
+        params[:sort].split(",").each {|sort_according_to| add_sorting_for(sort_according_to)}
+      end  
+    end  
+
+    def add_sorting_for(sort_according_to) 
+      arr_sort=sort_according_to.split("")
+      if arr_sort.first=="-"
+        @users=@users.order(" #{arr_sort[1..-1].join("")} DESC")
+      elsif arr_sort.first=="+"  
+        @users=@users.order(" #{arr_sort[1..-1].join("")} ASC")
+      else
+        @users=@users.order(" #{sort_according_to} ASC")
+      end  
+    end
+
+    #filtering selected users accordind to attributes values
+    #eg. "/users?admin=true&email=bunny"
+    def filter_users
+      allowed_keys=["email", "admin"]
+      filtering_keys=allowed_keys & params.keys
+      filtering_keys.each {|key| filter_by_key(key)}
+    end
+
+    def filter_by_key(key)
+      case key.to_s
+      when "email"  #email=someemail@dot.com
+        @users=@users.where("email LIKE '#{params[key]}%'")
+      when "admin"  
+        if ["true", true, "1", 1].include?(params[key])
+          @users=@users.where(admin: true)
+        elsif  ["false", false, "0", 0].include?(params[key])
+          @users=@users.where(admin: false)
+        else
+          #do not filter
+        end  
+      end  
+    end  
+    
+    #restrict returned users according to "limit=5" and "offset=100"
+    #no default pagination implemented
+    def limit_users
+      @users=@users.offset(params[:offset]) if params[:offset].present?
+      @users=@users.limit(params[:limit]) if params[:limit].present?
+    end  
+ 
+    #restrict returned attributes according to "fields=email,token"
+    def restrict_fields
+
+      allowed_fields=User.new.attributes.keys
+      @fields=allowed_fields & (params[:fields] || "").split(",")
+      if @fields.present?
+        @users=@users.select(@fields) 
+      else
+        @fields=allowed_fields
+      end  
+    end  
 
 end
 

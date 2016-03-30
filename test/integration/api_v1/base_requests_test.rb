@@ -1,11 +1,6 @@
-require 'test_helper'
-require 'support/requests_helper'
-require_relative 'api_setup'
+require_relative 'requests_test'
 
-class Api::V1::BaseRequestsTest < ActionDispatch::IntegrationTest
-
-include Api::V1::Setup  
-include ::RequestsHelper
+class Api::V1::BaseRequestsTest < Api::V1::RequestsTest
 
   test "Requires HTTPS" do
     get api_path_to("/users"), nil, auth_as(:admin).merge({}) 
@@ -22,5 +17,13 @@ include ::RequestsHelper
     get "https://www.example.com/api/v1/users.json", nil, {authorization: ActionController::HttpAuthentication::Basic.encode_credentials(users(:admin).token, "blahblah") }
     assert_response :ok
   end
+
+  test "it can figure out format from url extension" do
+    skip
+  end  
+
+  test "it can figure out format from headers Content Type" do
+    skip
+  end  
 
 end

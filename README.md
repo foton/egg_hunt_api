@@ -1,7 +1,7 @@
 # Egg Hunt API - Geocaching with easter eggs!
 
 ##Resources
-This api have 3 resources
+This RESTful JSONized API have 3 resources
 - _Users_, which are manged only by **admins**
 - _Locations_ (area in real world) (GPS boundaries top\_left , bottom\_right, optional: description, city)
 - _Eggs_ (location, size, time of placing, size, optional: decription, image)
@@ -9,10 +9,6 @@ This api have 3 resources
 Locations can overlap. 
 
 https://help.github.com/categories/writing-on-github/
-
-# This is an H1
-## This is an H2
-###### This is an H6
 
 ##Authentication and Authorization
 
@@ -26,16 +22,16 @@ or used as username HTTP Basic Authentication
     https://ds5468cyrfga51ysada:doesnotmatter@api.example.com/eggs
 
 There are 3 roles: **guest**, **user**. **admin**. 
-If You do not send any of these, You are not authenticated. So You are **quest**, and You can only read all _Eggs_ and _Locations_.
-If You are authenticated as **user**, You have same rights as **guest** and You can add _Eggs_ and _Locations_ and manipulate them (only the ones You own).
-If You are authenticated as **admin**, You can manipulate with all _Eggs_ and _Locations_ and also manipulate _Users_.
+* If You do not send any of these, You are not authenticated. So You are **quest**, and You can only read all _Eggs_ and _Locations_.
+* If You are authenticated as **user**, You have same rights as **guest** and You can add _Eggs_ and _Locations_ and manipulate them (only the ones You own).
+* If You are authenticated as **admin**, You can manipulate with all _Eggs_ and _Locations_ and also manipulate _Users_.
 
 
 
 
 
 
-This is also an H2
+Bellow is help for markdown for me
 ------------------
 *Italic characters* 
 _Italic characters_

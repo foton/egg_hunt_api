@@ -6,8 +6,8 @@ module Api
         :json
       end
       
-      def api_path_to(resource_path)  
-        "/api/v1/#{resource_path}.#{api_format}".gsub("//","/")
+      def api_path_to(resource_path,params_string="")  
+        "/api/v1/#{resource_path}.#{api_format}#{params_string.blank? ? "" : "?"+params_string}".gsub("//","/")
       end  
 
       def auth_as(user)
