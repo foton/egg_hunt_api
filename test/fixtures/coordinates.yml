@@ -1,0 +1,35 @@
+hyde_park_tl:
+  latitude_number: 51.5118883
+  longitude_number: 0.1905369
+  latitude_hemisphere: "N"
+  longitude_hemisphere: "W"
+
+hyde_park_br:
+  latitude_number: 51.5028867
+  longitude_number: 0.1512694
+  latitude_hemisphere: "N"
+  longitude_hemisphere: "W"
+
+olomouc_tl:
+  latitude_number: 49.6124894
+  longitude_number: 17.2159669
+  latitude_hemisphere: "N"
+  longitude_hemisphere: "E"
+
+olomouc_br:
+  latitude_number: 49.5604067
+  longitude_number: 17.3100375
+  latitude_hemisphere: "N"
+  longitude_hemisphere: "E"
+
+legoland_tl:
+  latitude_number: 55.7382294
+  longitude_number: 9.1201778
+  latitude_hemisphere: "N"
+  longitude_hemisphere: "E"
+
+legoland_br:
+  latitude_number: 55.7337958
+  longitude_number: 9.1300914
+  latitude_hemisphere: "N"
+  longitude_hemisphere: "E"

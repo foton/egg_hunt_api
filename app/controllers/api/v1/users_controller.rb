@@ -1,4 +1,4 @@
-class Api::V1::UsersController < ApplicationController
+class Api::V1::UsersController < Api::V1::ApiController
   
   def index
     load_users
@@ -104,12 +104,12 @@ class Api::V1::UsersController < ApplicationController
     def filter_by_key(key)
       case key.to_s
       when "email"  #email=someemail@dot.com
-        @users=@users.where("email LIKE '#{params[key]}%'")
+        @users=@users.where("email LIKE ?", "#{params[key]}%")
       when "admin"  
         if ["true", true, "1", 1].include?(params[key])
-          @users=@users.where(admin: true)
+          @users=@users.admins
         elsif  ["false", false, "0", 0].include?(params[key])
-          @users=@users.where(admin: false)
+          @users=@users.non_admins
         else
           #do not filter
         end  

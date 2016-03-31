@@ -1,9 +1,9 @@
-# Egg Hunt API - Geocaching with easter eggs!
+# Egg Hunt API v1 - Geocaching with easter eggs!
 
 ##Resources
 This RESTful JSONized API have 3 resources
 - _Users_, which are manged only by **admins**
-- _Locations_ (area in real world) (GPS boundaries top\_left , bottom\_right, optional: description, city)
+- _Locations_ (area in real world) (name, GPS boundaries by top\_left and bottom\_right conner, optional: description, city)
 - _Eggs_ (location, size, time of placing, size, optional: decription, image)
 
 Locations can overlap. 
@@ -11,7 +11,6 @@ Locations can overlap.
 https://help.github.com/categories/writing-on-github/
 
 ##Authentication and Authorization
-
 API uses HTTP Basic Token authorization. Token will be assigned to You by admin.
 Token can be send in request header 
   
@@ -27,7 +26,18 @@ There are 3 roles: **guest**, **user**. **admin**.
 * If You are authenticated as **admin**, You can manipulate with all _Eggs_ and _Locations_ and also manipulate _Users_.
 
 
+##Users
+Only **admins** can see and manipulate _Users_.
 
+Atributtes of `user` available to modification:
+* `email` (valid e-mail address)
+* `token` (at least 20 chars)
+* `admin` (`true` or `false`)
+If `user.token` is set to `""` or `null` or `"regenerate"`, new token will be created. Other values are directly used as token.
+
+##Locations (and Coordinates)
+
+##Eggs
 
 
 

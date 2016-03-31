@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+hyde_park:
+  name: Hyde park
+  top_left_coordinate: hyde_park_tl
+  bottom_right_coordinate: hyde_park_br
+  city: London
+  description: 
+  user: bunny1
+
+olomouc:
+  name: Olomouc
+  top_left_coordinate: olomouc_tl
+  bottom_right_coordinate: olomouc_br
+  city: Olomouc
+  description: Metropolis of Haná
+  user: bunny1
+
+legoland:
+  name: Legoland
+  top_left_coordinate: legoland_tl
+  bottom_right_coordinate: legoland_br
+  city: Billund
+  description: Home of bricks
+  user: bunny2
