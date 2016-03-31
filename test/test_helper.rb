@@ -20,7 +20,7 @@ require 'rails/test_help'
 class ActiveSupport::TestCase
  
   #if there are problems with Foreign Keys when loading fixtures see http://stackoverflow.com/a/28515064/1223501
-  fixtures(:users, :coordinates,:locations)
+  fixtures(:users, :coordinates,:locations, :eggs)
 
   # Add more helper methods to be used by all tests here...
 end

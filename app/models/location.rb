@@ -2,6 +2,7 @@ class Location < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :top_left_coordinate, class_name: "Coordinate"
 	belongs_to :bottom_right_coordinate, class_name: "Coordinate"
+  has_many :eggs, dependent: :destroy, inverse_of: :location
 
   validates :name, presence: true
   validates :top_left_coordinate, presence: true

@@ -1,13 +1,32 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  size: 1
-  name: MyString
-  location: 
-  user: 
+bricked:
+  size: 2
+  name: Round thing from angular things
+  location: legoland
+  user: bunny2
 
-two:
-  size: 1
-  name: MyString
-  location: 
-  user: 
+disassembled:
+  size: 2
+  name: Terminated round thing from angular things
+  location: legoland
+  user: bunny2
+
+faberge1:
+  size: 4
+  name: Smaragd and gold
+  location: olomouc
+  user: bunny2
+
+faberge2:
+  size: 4
+  name: Safir and silver
+  location: olomouc
+  user: bunny2
+
+kinder_surprise:
+  size: 3
+  name: You know
+  location: hyde_park
+  user: bunny1
+

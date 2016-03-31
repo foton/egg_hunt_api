@@ -29,12 +29,12 @@ ActiveRecord::Schema.define(version: 20160331133705) do
   add_index "coordinates", ["longitude_number"], name: "index_coordinates_on_longitude_number", using: :btree
 
   create_table "eggs", force: :cascade do |t|
-    t.integer  "size",        null: false
-    t.string   "name",        null: false
-    t.integer  "location_id", null: false
-    t.integer  "user_id",     null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "size",        limit: 2, null: false
+    t.string   "name",                  null: false
+    t.integer  "location_id",           null: false
+    t.integer  "user_id",               null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
   add_index "eggs", ["location_id"], name: "index_eggs_on_location_id", using: :btree

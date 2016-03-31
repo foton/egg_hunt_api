@@ -64,4 +64,35 @@ class UserTest < ActiveSupport::TestCase
     atts=User.authorized_attributes_for( nil )
     assert_equal [], atts
   end  
+
+  test "can have locations" do 
+    assert_equal 2, users(:bunny2).locations.size
+    assert_equal [locations(:olomouc), locations(:legoland) ], users(:bunny2).locations.to_a
+  end
+
+  test "location.user is nullified on user destroy" do 
+    assert_equal users(:bunny2), locations(:legoland).user
+    assert_equal users(:bunny2), locations(:olomouc).user
+
+    users(:bunny2).destroy
+    
+    locations(:legoland).reload
+    locations(:olomouc).reload
+    assert_equal nil, locations(:legoland).user
+    assert_equal nil, locations(:olomouc).user
+  end
+
+  test "can have eggs" do 
+    assert_equal 4, users(:bunny2).eggs.size
+    assert_equal [eggs(:bricked), eggs(:disassembled), eggs(:faberge1), eggs(:faberge2)], users(:bunny2).eggs.to_a
+  end
+
+  test "eggs are destroyed on user destroy" do 
+    user_egg_ids=users(:bunny2).eggs.pluck("id")
+    assert 4, user_egg_ids
+
+    users(:bunny2).destroy
+
+    assert Egg.where(id: user_egg_ids).empty?    
+  end 
 end

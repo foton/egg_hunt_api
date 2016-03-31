@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_secure_token
   has_many :locations, dependent: :nullify, inverse_of: :user
+  has_many :eggs, dependent: :destroy, inverse_of: :user
 
   TOKEN_FOR_REGENERATE="regenerate"
   EMAIL_REGEXP =/[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?/ # from http://regexlib.com/Search.aspx?k=email&c=1&m=-1&ps=20

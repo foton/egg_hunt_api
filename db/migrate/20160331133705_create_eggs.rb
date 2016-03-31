@@ -1,7 +1,7 @@
 class CreateEggs < ActiveRecord::Migration
   def change
     create_table :eggs do |t|
-      t.integer :size, null: false, index: true
+      t.integer :size, null: false, index: true, limit: 1
       t.string :name, null: false, index: true
       t.belongs_to :location, null: false, index: true
       t.belongs_to :user, null: false, index: true

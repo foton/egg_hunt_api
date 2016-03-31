@@ -211,4 +211,18 @@ class LocationTest < ActiveSupport::TestCase
     assert_equal "S", br_crd.latitude_hemisphere
     assert_equal "E", br_crd.longitude_hemisphere
   end  
+
+  test "can have eggs" do 
+    assert_equal 2, locations(:olomouc).eggs.size
+    assert_equal [eggs(:faberge1), eggs(:faberge2)], locations(:olomouc).eggs.to_a
+  end
+
+  test "eggs are destroyed on location.destroy" do 
+    egg_ids=locations(:olomouc).eggs.pluck("id")
+    assert 2, egg_ids
+
+    locations(:olomouc).destroy
+
+    assert Egg.where(id: egg_ids).empty?    
+  end 
 end
