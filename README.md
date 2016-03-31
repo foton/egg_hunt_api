@@ -1,5 +1,7 @@
 # Egg Hunt API v1 - Geocaching with easter eggs!
 
+If You are not sure about correct calls, maybe test files in `/test/integration/api/v1/` will help.
+
 ##Resources
 This RESTful JSONized API have 3 resources
 - _Users_, which are manged only by **admins**
@@ -8,7 +10,6 @@ This RESTful JSONized API have 3 resources
 
 Locations can overlap. 
 
-https://help.github.com/categories/writing-on-github/
 
 ##Authentication and Authorization
 API uses HTTP Basic Token authorization. Token will be assigned to You by admin.
@@ -29,6 +30,91 @@ There are 3 roles: **guest**, **user**. **admin**.
 ##Users
 Only **admins** can see and manipulate _Users_.
 
+Index of users: `curl -k https://localhost:3001/api/v1/users.json -H 'Authorization: Token token="R3plac3MeImm3d1a7elly"'`
+
+    200
+    [
+      {
+        "id":1,
+        "email":"foton@centrum.cz",
+        "token":"R3plac3MeImm3d1a7elly",
+        "admin":true,
+        "created_at":"2016-03-31T22:43:33.893+02:00",
+        "updated_at":"2016-03-31T22:43:33.893+02:00"
+      },
+      {
+        "id":2,
+        "email":"bunny@centrum.cz",
+        "token":"fGFCVDFrkbR3dx775pqPHMX3",
+        "admin":true,
+        "created_at":"2016-03-31T22:43:33.909+02:00",
+        "updated_at":"2016-03-31T22:43:33.909+02:00"
+      }
+    ]
+
+View of user: `curl -k https://localhost:3001/api/v1/users/1.json -H 'Authorization: Token token="R3plac3MeImm3d1a7elly"'`
+
+      200
+      {
+        "id":1,
+        "email":"foton@centrum.cz",
+        "token":"R3plac3MeImm3d1a7elly",
+        "admin":true,
+        "created_at":"2016-03-31T22:43:33.893+02:00",
+        "updated_at":"2016-03-31T22:43:33.893+02:00"
+      }
+
+Creating user (HTTP method POST): `curl -k https://localhost:3001/api/v1/users.json -H 'Authorization: Token token="R3plac3MeImm3d1a7elly"' -X POST -H "Content-Type: application/json" -d '{"user": {"email":"xyz@email.cz","admin": true}}'`
+
+      201
+      {
+        "id":3,
+        "email":"xyz@email.cz",
+        "token":"vFDwodq8w7Ev2m777TMHrHJF",
+        "admin":true,
+        "created_at":"2016-03-31T23:43:33.893+02:00",
+        "updated_at":"2016-03-31T23:43:33.893+02:00"
+      }
+
+
+Updating user (HTTP method PUT or PATCH): `curl -k https://localhost:3001/api/v1/users/3.json -H 'Authorization: Token token="R3plac3MeImm3d1a7elly"' -X PATCH -H "Content-Type: application/json" -d '{"user": {"token":"myLittlePonnyToken123", "admin": false}}'`
+
+      200
+      {
+        "id":3,
+        "email":"xyz@email.cz",
+        "token":"myLittlePonnyToken123",
+        "admin":false,
+        "created_at":"2016-03-31T23:43:33.893+02:00",
+        "updated_at":"2016-03-31T23:45:33.893+02:00"
+      }
+
+
+Deleting user (HTTP method DELETE): `curl -k https://localhost:3001/api/v1/users/3.json -H 'Authorization: Token token="R3plac3MeImm3d1a7elly"' -X DELETE `
+
+      200
+      {
+        "id": null,
+        "email":"xyz@email.cz",
+        "token":"myLittlePonnyToken123",
+        "admin":false,
+        "created_at":"2016-03-31T23:43:33.893+02:00",
+        "updated_at":"2016-03-31T23:45:33.893+02:00"
+      }
+
+
+Creating/Updating user with invalid data return errors: `curl -k https://localhost:3001/api/v1/users.json -H 'Authorization: Token token="R3plac3MeImm3d1a7elly"' -X POST -H "Content-Type: application/json" -d '{"user": {"email":"xyz_email.cz","admin": true}}'`
+
+      422
+      {
+        "errors": 
+        { 
+          "email": ["is invalid"]
+        }
+      }
+
+When user is deleted, `user_id` of his __locations__ will be set tu `null`. His/her __eggs__ will be deleted.
+
 Atributtes of `user` available to modification:
 * `email` (valid e-mail address)
 * `token` (at least 20 chars)
@@ -36,68 +122,136 @@ Atributtes of `user` available to modification:
 If `user.token` is set to `""` or `null` or `"regenerate"`, new token will be created. Other values are directly used as token.
 
 ##Locations (and Coordinates)
+Location is rectangular area defined by top-left (TL) and bottom-right (BR) coordinate.
+Coordinates are in GPS format decimal degrees + N-S , W-E hemispheres.
+For example: 
+* "0.00001N, 0.00001E" is just "step" from crossing Equator and 0 Meridian
+* "0.00001N, 179.5900001E" is near "day-border-line" in Pacific (from Asia side)
+* "0.00001N, 179.5900001W" is near "day-border-line" in Pacific (from America side)
+* "51.4769433N, 0.0005519W" is Greenwich observatory
+
+Index of locations: `curl -k https://localhost:3001/api/v1/locations.json`
+
+    [
+      {
+        "id":1,
+        "name":"Hide and seek park",
+        "city":"London",
+        "description":null,
+        "user_id":2,
+        "top_left_coordinate_id":1,
+        "bottom_right_coordinate_id":2,
+        "created_at":"2016-03-31T22:43:33.956+02:00",
+        "updated_at":"2016-03-31T22:43:33.956+02:00"
+      },
+      {
+        "id":2,
+        "name":"Olomouc",
+        "city":"Olomouc",
+        "description":"Metropolis of Haná",
+        "user_id":2,
+        "top_left_coordinate_id":3,
+        "bottom_right_coordinate_id":4,
+        "created_at":"2016-03-31T22:43:33.967+02:00",
+        "updated_at":"2016-03-31T22:43:33.967+02:00"
+      }
+    ]
+
+View of location: `curl -k https://localhost:3001/api/v1/locations/1.json`
+
+Creating location (HTTP method POST): `curl -k https://localhost:3001/api/v1/locations.json -H 'Authorization: Token token="fGFCVDFrkbR3dx775pqPHMX3"' -X POST -H "Content-Type: application/json" -d '{"location": {"name":"Holomóc", "city": "Olomouc", "top_left_coordinate_str": "49.6124894N, 17.2159669E" ,"bottom_right_coordinate_str": "49.5604067N, 17.3100375E"}}'`
+
+      201
+      {
+        "id":1,
+        "name":"Holomóc",
+        "city":"Olomouc",
+        "description":null,
+        "user_id":2,
+        "top_left_coordinate_id":5,
+        "bottom_right_coordinate_id":6,
+        "created_at":"2016-03-31T23:43:33.893+02:00",
+        "updated_at":"2016-03-31T23:43:33.893+02:00"
+      }
+
+Updating, Deleting accordingly to __users__ .
+**User cannot delete/update location, which have eggs of other users. This return 424 :failed_dependency.**
+Admins are allowed to do it.
+
+When location is deleted, all __eggs__ in it will be deleted.
+
+Atributtes of `location` available to modification:
+* `name` (3-250 chars)
+* `city` (optional)
+* `description` (optional)
+* `top_left_coordinate_str` (string representing coordinate of top left corner of area rectangle)
+* `bottom_right_coordinate_str` (string representing coordinate of bottom right corner of area rectangle)
+
+`.._coordinate_str` attributes are converted to Coordinate object. This object is not yet published back.
+`user_id` is automagically added according to current user who created the location.
+
 
 ##Eggs
+Index of eggs: `curl -k https://localhost:3001/api/v1/eggs.json`
 
+    [
+      {
+        "id":1,
+        "size":2,
+        "name":"Round thing from angular things",
+        "location_id":1,
+        "user_id":2,
+        "created_at":"2016-03-31T22:43:33.995+02:00",
+        "updated_at":"2016-03-31T22:43:33.995+02:00"
+      },
+      {
+        "id":2,
+        "size":1,
+        "name":"Terminated round thing from angular things",
+        "location_id":1,
+        "user_id":2,
+        "created_at":"2016-03-31T22:43:34.009+02:00",
+        "updated_at":"2016-03-31T22:43:34.009+02:00"
+      },
+      {
+        "id":3,
+        "size":4,
+        "name":"Fabergé: Smaragd and gold",
+        "location_id":2,
+        "user_id":1,
+        "created_at":"2016-03-31T22:43:34.020+02:00",
+        "updated_at":"2016-03-31T22:43:34.020+02:00"
+      },
+      {
+        "id":4,
+        "size":4,
+        "name":"Fabergé: Safir and silver",
+        "location_id":2,
+        "user_id":1,
+        "created_at":"2016-03-31T22:43:34.031+02:00",
+        "updated_at":"2016-03-31T22:43:34.031+02:00"
+      }
+    ]
 
+Creating egg (HTTP method POST): `curl -k https://localhost:3001/api/v1/eggs.json -H 'Authorization: Token token="fGFCVDFrkbR3dx775pqPHMX3"' -X POST -H "Content-Type: application/json" -d '{"egg": {"name":"TargaryenEgg", "size": 6, "location_id": 2}}'`
 
-Bellow is help for markdown for me
-------------------
-*Italic characters* 
-_Italic characters_
-**bold characters**
-__bold characters__
-~~strikethrough text~~
-* Item 1
-* Item 2
-* Item 3
-  * Item 3a
-  * Item 3b
-  * Item 3c
-  1. Step 1
-2. Step 2
-3. Step 3
-   1. Step 3.1
-   2. Step 3.2
-   3. Step 3.3
+      201
+      {
+        "id":5,
+        "name":"TargaryenEgg",
+        "size":6,
+        "location_id":2,
+        "user_id":2,
+        "created_at":"2016-03-31T23:43:33.893+02:00",
+        "updated_at":"2016-03-31T23:43:33.893+02:00"
+      }
 
-   Use the backtick to refer to a `function()`.
- 
-There is a literal ``backtick (`)`` here.
+Updating, Deleting accordingly to __users__ .
+**User cannot delete/update eggs of other users. This return 403 :forbidden.**
+Admins are allowed to do it.
 
-Indent every line of the block by at least 4 spaces.
-
-This is a normal paragraph:
-
-    This is a code block.
-    With multiple lines.
-
-Alternatively, you can use 3 backtick quote marks before and after the block, like this:
-
-```
-This is a code block
-```
-
-To add syntax highlighting to a code block, add the name of the language immediately
-after the backticks: 
-
-```javascript
-var oldUnload = window.onbeforeunload;
-window.onbeforeunload = function() {
-    saveCoverage();
-    if (oldUnload) {
-        return oldUnload.apply(this, arguments);
-    }
-};
-```
-
-This is [an example](http://www.example.com/) inline link.
-
-[This link](http://example.com/ "Title") has a title attribute.
-
-Links are also auto-detected in text: http://example.com/
-
-| Day     | Meal    | Price |
-| --------|---------|-------|
-| Monday  | pasta   | $6    |
-| Tuesday | chicken | $8    |
+Atributtes of `egg` available to modification:
+* `name` (3-250 chars)
+* `size` (one of 1,2,3,4,5,6 ; see `/app/models/egg.rb` `SIZES` constant for description)
+* `location_id` (ID of location to which egg belongs; must exist in app)
+`user_id` is automagically added according to current user who created the egg.

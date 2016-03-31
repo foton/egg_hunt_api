@@ -1,7 +1,6 @@
 require_relative "../models/exceptions/other_user_eggs_exists.rb"
 require_relative "../models/exceptions/user_not_authorized.rb"
 
-
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
