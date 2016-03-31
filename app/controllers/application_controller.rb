@@ -1,4 +1,6 @@
-#require_relative "../models/exception/"
+require_relative "../models/exceptions/other_user_eggs_exists.rb"
+require_relative "../models/exceptions/user_not_authorized.rb"
+
 
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
@@ -71,6 +73,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from Exceptions::OtherUsersEggsExists do |exception|
+    respond_to do |format|
+      format.html { 
+        flash[:error]=exception.message
+        redirect_to (request.referer || root_path)
+      }
+      format.any(:xml, :json) { render( request.format.to_sym => {errors: {eggs: [exception.message]}}, :status => :failed_dependency) }
+    end
+  end
+
   def raise_test_exception
     raise "TEST Exception"
   end
@@ -122,6 +134,5 @@ class ApplicationController < ActionController::Base
           end  
         }
       end
-
     end  
 end

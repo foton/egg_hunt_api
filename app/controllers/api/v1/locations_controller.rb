@@ -17,12 +17,14 @@ class Api::V1::LocationsController < Api::V1::ApiController
 
   def update
     load_location
+    check_eggs_of_other_users
     build_location
     save_location
   end
 
   def destroy
     load_location
+    check_eggs_of_other_users
     @location.destroy
     respond_with(@location)
   end
@@ -154,6 +156,12 @@ class Api::V1::LocationsController < Api::V1::ApiController
 
       @locations=@locations.where(Location.where(top_left_coordinate_id: coord_ids, bottom_right_coordinate_id: coord_ids).where_values.inject(:or))
     end
+
+    def check_eggs_of_other_users
+      if @location.eggs.present? && current_user && !current_user.admin?
+        raise Exceptions::OtherUsersEggsExists.new if (@location.eggs.where.not(user_id: current_user.id).exists?)
+      end  
+    end  
 end
 
 
