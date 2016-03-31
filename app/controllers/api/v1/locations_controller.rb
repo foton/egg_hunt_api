@@ -140,21 +140,10 @@ class Api::V1::LocationsController < Api::V1::ApiController
     
     #get all known coordinates which are in this area and scope locations to ones which use them
     def filter_by_area
-      border_params=Location.get_border_params(params[:area_tl],params[:area_br])
-      #hairy but fast solution 
-      #TODO: rewrite using AREL
-      locs_ids=[]
-      coord_ids=[]
-      crd_table=Coordinate.arel_table
-
-      border_params.each do |bp|
-        ar_lat=crd_table[:latitude_number].gteq(bp[:min_latitude]).and(crd_table[:latitude_number].lteq(bp[:max_latitude])).and(crd_table[:latitude_hemisphere].eq(bp[:lat_hemisphere]))
-        ar_long=crd_table[:longitude_number].gteq(bp[:min_longitude]).and(crd_table[:longitude_number].lteq(bp[:max_longitude])).and(crd_table[:longitude_hemisphere].eq(bp[:long_hemisphere]))
-        coord_ids+=Coordinate.where(ar_lat.and(ar_long)).pluck(:id)
-      end
-      coord_ids.uniq!
-
-      @locations=@locations.where(Location.where(top_left_coordinate_id: coord_ids, bottom_right_coordinate_id: coord_ids).where_values.inject(:or))
+      coord_ids=get_coordinates_within(params[:area_tl],params[:area_br])
+      if coord_ids.present?
+        @locations=@locations.where(Location.where(top_left_coordinate_id: coord_ids, bottom_right_coordinate_id: coord_ids).where_values.inject(:or))
+      end  
     end
 
     def check_eggs_of_other_users

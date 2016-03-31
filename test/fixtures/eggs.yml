@@ -11,6 +11,7 @@ disassembled:
   name: Terminated round thing from angular things
   location: legoland
   user: bunny2
+  created_at: "2001-01-01"
 
 faberge1:
   size: 4
