@@ -18,6 +18,7 @@ class Api::V1::LocationRequestsAsUserTest < Api::V1::RequestsTest
     assert response_json['id'].present?
     assert response_json['created_at'].present?
     assert response_json['updated_at'].present?
+    assert_equal "https://www.example.com/api/v1/locations/#{response_json['id']}.json", response.headers['Location']
 
     assert_equal locations_count+1, Location.count
     assert_equal Location.find(response_json['id']).to_json, response.body

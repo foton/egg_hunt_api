@@ -97,6 +97,7 @@ class Api::V1::UserRequestsAsAdminTest < Api::V1::RequestsTest
     assert response_json['id'].present?
     assert response_json['created_at'].present?
     assert response_json['updated_at'].present?
+    assert_equal "https://www.example.com/api/v1/users/#{response_json['id']}.json", response.headers['Location']
 
     assert_equal users_count+1, User.count
     assert_equal User.find(response_json['id']).to_json, response.body

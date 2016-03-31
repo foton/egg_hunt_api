@@ -62,7 +62,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       new_r = @user.new_record?
       headers ={}
       if @user.save
-        headers= ( new_r ? {status: :created, location: api_v1_user_url(:id => @user.id) } : {status: :ok} )
+        headers= ( new_r ? {status: :created, location: api_v1_user_url(:id => @user.id, format: (params[:format] || :json) )) } : {status: :ok} )
       end   
       respond_with(@user, headers)
     end
