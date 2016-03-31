@@ -29,7 +29,19 @@ class Api::V1::LocationRequestsAsAdminTest < Api::V1::RequestsTest
     assert_equal ['name','top_left_coordinate_id','bottom_right_coordinate_id','city','description', 'user_id', 'id','created_at','updated_at'].sort, response_json.keys.sort
   end  
 
-  test("Admin cannot delete location if there are eggs of other users") do
+  test("Admin can change user_id") do
+    location_params={name: "Gotham bay", city:  "Gotham", user_id: users(:bunny2).id}
+    location=locations(:hyde_park)
+    refute_equal users(:bunny2), location.user
+ 
+    by_https { patch api_path_to("/locations/#{location.id}"), {location: location_params },  auth_as(:admin).merge({}) }
+
+    assert_response :ok
+    assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
+    assert_equal users(:bunny2).id, response_json['user_id']
+  end 
+
+  test("Admin can delete location if there are eggs of other users") do
     locations_count=Location.count
  
     by_https { delete api_path_to("/locations/#{@location.id}"), nil,  auth_as(:admin).merge({}) }

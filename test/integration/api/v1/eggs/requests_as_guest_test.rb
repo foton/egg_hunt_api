@@ -4,7 +4,7 @@ class Api::V1::EggRequestsAsGuestTest < Api::V1::RequestsTest
 
   test "Guest can get all eggs" do
     by_https { get api_path_to("/eggs"), nil, nil }
-
+  
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
     assert_equal 5, response_json.size

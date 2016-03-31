@@ -86,6 +86,17 @@ class Api::V1::LocationRequestsAsUserTest < Api::V1::RequestsTest
     assert_equal ['name','top_left_coordinate_id','bottom_right_coordinate_id','city','description', 'user_id', 'id','created_at','updated_at'].sort, response_json.keys.sort
   end  
 
+  test("User cannot change user_id") do
+    location_params={name: "Gotham bay", city:  "Gotham", user_id: users(:admin).id}
+    location=locations(:hyde_park)
+ 
+    by_https { patch api_path_to("/locations/#{location.id}"), {location: location_params },  auth_as(:bunny1).merge({}) }
+
+    assert_response :ok
+    assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
+    assert_equal users(:bunny1).id, response_json['user_id']
+  end 
+
   test("User cannot delete location if there are eggs of other users") do
     location=locations(:legoland)
     locations_count=Location.count

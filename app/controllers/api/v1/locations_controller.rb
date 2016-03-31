@@ -65,7 +65,7 @@ class Api::V1::LocationsController < Api::V1::ApiController
       new_r = @location.new_record?
       headers ={}
       if @location.save
-        headers= ( new_r ? {status: :created, location: api_v1_location_url(:id => @location.id, format: (params[:format] || :json) ) }  : {status: :ok} )
+        headers= ( new_r ? {status: :created, location: api_v1_location_url(id: @location.id, format: (params[:format] || :json) ) }  : {status: :ok} )
       end   
       respond_with(@location, headers)
     end

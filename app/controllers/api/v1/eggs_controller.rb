@@ -17,12 +17,14 @@ class Api::V1::EggsController < Api::V1::ApiController
 
   def update
     load_egg
+    authorize_owner_of_egg
     build_egg
     save_egg
   end
 
   def destroy
     load_egg
+    authorize_owner_of_egg
     @egg.destroy
     respond_with(@egg)
   end
@@ -35,6 +37,10 @@ class Api::V1::EggsController < Api::V1::ApiController
       else
         [:index, :show, :create, :update, :destroy] #user and admin
       end  
+    end  
+
+    def authorize_owner_of_egg
+      raise Exceptions::UserNotAuthorized unless (current_user.admin? || (current_user.id == @egg.user_id))
     end  
 
     def load_eggs
@@ -58,12 +64,11 @@ class Api::V1::EggsController < Api::V1::ApiController
       @egg.user=current_user if @egg.user.blank?
     end
 
-    #TODO: rewrite with block?
     def save_egg
       new_r = @egg.new_record?
       headers ={}
       if @egg.save
-        headers= ( new_r ? {status: :created, egg: api_v1_egg_url(:id => @egg.id, format: (params[:format] || :json) ) }  : {status: :ok} )
+        headers= ( new_r ? {status: :created, location: api_v1_egg_url(id: @egg.id, format: (params[:format] || :json) ) }  : {status: :ok} )
       end   
       respond_with(@egg, headers)
     end

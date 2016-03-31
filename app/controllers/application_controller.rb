@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   end
   
   rescue_from Exceptions::UserNotAuthorized do |exception|
-    msg = exception.message.blank? ? "You are not authorized for this action!" : exception.message
+    msg = exception.message.blank? ? "You are not authorized for this action on this object!" : exception.message
     respond_to do |format|
       format.html { 
         flash[:error]=msg

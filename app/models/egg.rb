@@ -16,6 +16,15 @@ class Egg < ActiveRecord::Base
   validates :location, presence: true
   validates :user, presence: true
 
+ def self.authorized_attributes_for(user)
+    attrs=[]
+    if user.present?
+      attrs=[:name, :size, :location_id]
+      attrs << :user_id if user.admin?
+    end
+    attrs  
+  end 
+
   def size_to_s
     (SIZES.select {|s| s[:value] == self.size}).first[:desc]
   end  
