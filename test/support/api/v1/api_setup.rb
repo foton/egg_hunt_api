@@ -20,6 +20,10 @@ module Api
         JSON.parse(response.body)
       end
 
+      def response_xml
+        Hash.from_xml(response.body)
+      end
+
     end
   end    
 end
