@@ -26,7 +26,7 @@ class Api::V1::LocationRequestsAsAdminTest < Api::V1::RequestsTest
     assert_equal locations_count, Location.count
     @location.reload
     assert_equal @location.to_json, response.body
-    assert ['name','city','description','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['name','top_left_coordinate_id','bottom_right_coordinate_id','city','description', 'user_id', 'id','created_at','updated_at'].sort, response_json.keys.sort
   end  
 
   test("Admin cannot delete location if there are eggs of other users") do

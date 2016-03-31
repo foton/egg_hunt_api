@@ -64,7 +64,7 @@ class Api::V1::UserRequestsAsAdminTest < Api::V1::RequestsTest
     assert_equal user.created_at, response_json['created_at']
     assert_equal user.updated_at, response_json['updated_at']
     assert_equal user.to_json, response.body
-    assert ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
   end  
 
   test("Admin can view his/her own profile") do
@@ -101,7 +101,7 @@ class Api::V1::UserRequestsAsAdminTest < Api::V1::RequestsTest
 
     assert_equal users_count+1, User.count
     assert_equal User.find(response_json['id']).to_json, response.body
-    assert ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
   end
 
   test("Admin get errors when created user is wrong") do
@@ -136,7 +136,7 @@ class Api::V1::UserRequestsAsAdminTest < Api::V1::RequestsTest
     assert_equal users_count, User.count
     user.reload
     assert_equal user.to_json, response.body
-    assert ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
   end
 
   test("Admin get errors when updating of user go wrong") do
@@ -173,7 +173,7 @@ class Api::V1::UserRequestsAsAdminTest < Api::V1::RequestsTest
     assert_equal users_count, User.count
     user.reload
     assert_equal user.to_json, response.body
-    assert ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
   end
 
    test("Admin can regenerate user token") do
@@ -201,7 +201,7 @@ class Api::V1::UserRequestsAsAdminTest < Api::V1::RequestsTest
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
     assert_equal user.to_json, response.body
     assert_equal users_count-1, User.count
-    assert ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['email','token','admin','id','created_at','updated_at'].sort, response_json.keys.sort
   end  
   
 end

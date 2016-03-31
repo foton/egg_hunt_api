@@ -74,7 +74,7 @@ class Api::V1::LocationRequestsAsGuestTest < Api::V1::RequestsTest
     assert_equal location.created_at, response_json['created_at']
     assert_equal location.updated_at, response_json['updated_at']
     assert_equal location.to_json, response.body
-    assert ['name','top_left_coordinate','bottom_right_coordinate','city','description', 'user_id', 'id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['name','top_left_coordinate_id','bottom_right_coordinate_id','city','description', 'user_id', 'id','created_at','updated_at'].sort, response_json.keys.sort
   end
 
   test("Guest cannot create location") {assert_kicked_off(:guest, :post, api_path_to("/locations"), {location: {name: "Gotham bay", city:  "Gotham", top_left_coordinate: "tlc", bottom_right_coordinate: "brc"}}, nil)}

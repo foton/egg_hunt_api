@@ -22,7 +22,7 @@ class Api::V1::LocationRequestsAsUserTest < Api::V1::RequestsTest
 
     assert_equal locations_count+1, Location.count
     assert_equal Location.find(response_json['id']).to_json, response.body
-    assert ['name','city','description','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['name','top_left_coordinate_id','bottom_right_coordinate_id','city','description', 'user_id', 'id','created_at','updated_at'].sort, response_json.keys.sort
   end  
 
   test("User cannot update location if there are eggs of other users") do
@@ -59,7 +59,7 @@ class Api::V1::LocationRequestsAsUserTest < Api::V1::RequestsTest
     assert_equal locations_count, Location.count
     location.reload
     assert_equal location.to_json, response.body
-    assert ['name','city','description','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['name','top_left_coordinate_id','bottom_right_coordinate_id','city','description', 'user_id', 'id','created_at','updated_at'].sort, response_json.keys.sort
   end  
 
   test("User can update location if there are no eggs") do
@@ -83,7 +83,7 @@ class Api::V1::LocationRequestsAsUserTest < Api::V1::RequestsTest
     assert_equal locations_count, Location.count
     location.reload
     assert_equal location.to_json, response.body
-    assert ['name','city','description','id','created_at','updated_at'].sort, response_json.keys.sort
+    assert_equal ['name','top_left_coordinate_id','bottom_right_coordinate_id','city','description', 'user_id', 'id','created_at','updated_at'].sort, response_json.keys.sort
   end  
 
   test("User cannot delete location if there are eggs of other users") do
