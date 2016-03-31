@@ -308,9 +308,9 @@ All indexes have ability to sort, limit, search/filter objects and limit returne
 
 will 
 * select only eggs 
-**newer than 1.1.2001 8:00 UTC
-**smaller then 5
-**with name starting on "Kr"
+  *newer than 1.1.2001 8:00 UTC
+  *smaller then 5
+  *with name starting on "Kr"
 *pick only 5 to 15th record
 *return only `id`,`size`,`name`,`location_id` attributes
 *sort result by `size` "desc" and `name` "asc"
