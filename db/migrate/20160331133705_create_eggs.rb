@@ -3,8 +3,8 @@ class CreateEggs < ActiveRecord::Migration
     create_table :eggs do |t|
       t.integer :size, null: false, index: true
       t.string :name, null: false, index: true
-      t.reference :location, null: false, index: true
-      t.reference :user, null: false, index: true
+      t.belongs_to :location, null: false, index: true
+      t.belongs_to :user, null: false, index: true
 
       t.timestamps null: false
     end
