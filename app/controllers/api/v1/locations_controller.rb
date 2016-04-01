@@ -142,10 +142,8 @@ class Api::V1::LocationsController < Api::V1::ApiController
     
     #get all known coordinates which are in this area and scope locations to ones which use them
     def filter_by_area
-      coord_ids=get_coordinates_within(params[:area_tl],params[:area_br])
-      if coord_ids.present?
-        @locations=@locations.where(Location.where(top_left_coordinate_id: coord_ids, bottom_right_coordinate_id: coord_ids).where_values.inject(:or))
-      end  
+      loc_ids=Area.new(params[:area_tl],params[:area_br]).locations.collect {|loc| loc.id}
+      @locations=@locations.where(id: loc_ids)
     end
 
     def check_eggs_of_other_users

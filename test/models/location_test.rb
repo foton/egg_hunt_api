@@ -9,127 +9,6 @@ class LocationTest < ActiveSupport::TestCase
     assert @location.valid?, "@location is not valid! errors: #{@location.errors.full_messages}"
   end  
 
-  test "can find borders within same quadrant" do
-    tl="56.0N,3.0W"
-    br="53.0N,1.0W"
-    
-    borders=Location.get_border_params(tl,br)
-    
-    assert_equal 1, borders.size
-    assert_equal 56.0, borders.first[:max_latitude]
-    assert_equal 53.0, borders.first[:min_latitude]
-    assert_equal 3.0, borders.first[:max_longitude]
-    assert_equal 1.0, borders.first[:min_longitude]
-    assert_equal "N", borders.first[:lat_hemisphere]
-    assert_equal "W", borders.first[:long_hemisphere]
-  end	
-
-  test "can find borders within 2 quadrants around 0 meridian" do
-    tl="56.0N,3.0W"
-    br="53.0N,1.0E"
-    
-    borders=Location.get_border_params(tl,br)
-    
-    assert_equal 2, borders.size
-
-    assert_equal 56.0, borders.first[:max_latitude]
-    assert_equal 53.0, borders.first[:min_latitude]
-    assert_equal 3.0, borders.first[:max_longitude]
-    assert_equal 0.0, borders.first[:min_longitude]
-    assert_equal "N", borders.first[:lat_hemisphere]
-    assert_equal "W", borders.first[:long_hemisphere]
-
-    assert_equal 56.0, borders.second[:max_latitude]
-    assert_equal 53.0, borders.second[:min_latitude]
-    assert_equal 1.0, borders.second[:max_longitude]
-    assert_equal 0.0, borders.second[:min_longitude]
-    assert_equal "N", borders.second[:lat_hemisphere]
-    assert_equal "E", borders.second[:long_hemisphere]
-  end	
-
-  test "can find borders within 2 quadrants around 180 meridian" do
-    tl="56.0N,170.0E"
-    br="53.0N,175.0W"
-    
-    borders=Location.get_border_params(tl,br)
-    
-    assert_equal 2, borders.size
-
-    assert_equal 56.0, borders.first[:max_latitude]
-    assert_equal 53.0, borders.first[:min_latitude]
-    assert_equal 180.0, borders.first[:max_longitude]
-    assert_equal 170.0, borders.first[:min_longitude]
-    assert_equal "N", borders.first[:lat_hemisphere]
-    assert_equal "E", borders.first[:long_hemisphere]
-
-    assert_equal 56.0, borders.second[:max_latitude]
-    assert_equal 53.0, borders.second[:min_latitude]
-    assert_equal 180.0, borders.second[:max_longitude]
-    assert_equal 175.0, borders.second[:min_longitude]
-    assert_equal "N", borders.second[:lat_hemisphere]
-    assert_equal "W", borders.second[:long_hemisphere]
-  end	
-
-  test "can find borders within 2 quadrants around equator" do
-    tl="56.0N,3.0W"
-    br="53.0S,1.0W"
-    
-    borders=Location.get_border_params(tl,br)
-    
-    assert_equal 2, borders.size
-
-    assert_equal 56.0, borders.first[:max_latitude]
-    assert_equal 0.0, borders.first[:min_latitude]
-    assert_equal 3.0, borders.first[:max_longitude]
-    assert_equal 1.0, borders.first[:min_longitude]
-    assert_equal "N", borders.first[:lat_hemisphere]
-    assert_equal "W", borders.first[:long_hemisphere]
-
-    assert_equal 53.0, borders.second[:max_latitude]
-    assert_equal 0.0, borders.second[:min_latitude]
-    assert_equal 3.0, borders.second[:max_longitude]
-    assert_equal 1.0, borders.second[:min_longitude]
-    assert_equal "S", borders.second[:lat_hemisphere]
-    assert_equal "W", borders.second[:long_hemisphere]
-  end	
-
-  test "can find borders within 4 quadrants around equator and 0 meridian" do
-    tl="56.0N,3.0W"
-    br="53.0S,1.0E"
-    
-    borders=Location.get_border_params(tl,br)
-    
-    assert_equal 4, borders.size
-
-    assert_equal 56.0, borders.first[:max_latitude]
-    assert_equal 0.0, borders.first[:min_latitude]
-    assert_equal 3.0, borders.first[:max_longitude]
-    assert_equal 0.0, borders.first[:min_longitude]
-    assert_equal "N", borders.first[:lat_hemisphere]
-    assert_equal "W", borders.first[:long_hemisphere]
-   
-    assert_equal 56.0, borders[1][:max_latitude]
-    assert_equal 0.0, borders[1][:min_latitude]
-    assert_equal 1.0, borders[1][:max_longitude]
-    assert_equal 0.0, borders[1][:min_longitude]
-    assert_equal "N", borders[1][:lat_hemisphere]
-    assert_equal "E", borders[1][:long_hemisphere]
-
-    assert_equal 53.0, borders[2][:max_latitude]
-    assert_equal 0.0, borders[2][:min_latitude]
-    assert_equal 3.0, borders[2][:max_longitude]
-    assert_equal 0.0, borders[2][:min_longitude]
-    assert_equal "S", borders[2][:lat_hemisphere]
-    assert_equal "W", borders[2][:long_hemisphere]
-
-    assert_equal 53.0, borders[3][:max_latitude]
-    assert_equal 0.0, borders[3][:min_latitude]
-    assert_equal 1.0, borders[3][:max_longitude]
-    assert_equal 0.0, borders[3][:min_longitude]
-    assert_equal "S", borders[3][:lat_hemisphere]
-    assert_equal "E", borders[3][:long_hemisphere]
-  end	
-
   test "require name" do
     @location.name=nil
     refute @location.valid?
@@ -225,4 +104,22 @@ class LocationTest < ActiveSupport::TestCase
 
     assert Egg.where(id: egg_ids).empty?    
   end 
+
+  test "can form it's area" do
+    loc=Location.create!( name: "location_11_55_se", 
+                          top_left_coordinate_str: "1.0S,1.0E",
+                          bottom_right_coordinate_str: "5.0S,5.0E",
+                          user: users(:admin) )
+    
+    assert loc.top_left_coordinate.kind_of?(Coordinate)
+    assert loc.bottom_right_coordinate.kind_of?(Coordinate)
+
+    area =loc.area
+
+    assert_equal loc.top_left_coordinate, area.tl_crd
+    assert_equal loc.bottom_right_coordinate, area.br_crd
+
+    assert_equal "1.0S, 1.0E", area.tl_crd.to_s
+    assert_equal "5.0S, 5.0E", area.br_crd.to_s
+  end  
 end

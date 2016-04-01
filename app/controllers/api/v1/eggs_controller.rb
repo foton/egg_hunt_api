@@ -182,11 +182,8 @@ class Api::V1::EggsController < Api::V1::ApiController
     
     #get all known coordinates which are in this area and scope eggs to ones which use them
     def filter_by_area
-      coord_ids=get_coordinates_within(params[:area_tl],params[:area_br])
-      if coord_ids.present?
-        location_ids=Location.where(Location.where(top_left_coordinate_id: coord_ids, bottom_right_coordinate_id: coord_ids).where_values.inject(:or)).pluck(:id)
-        @eggs=@eggs.where(location_id: location_ids)
-      end  
+      loc_ids=Area.new(params[:area_tl],params[:area_br]).locations.collect {|loc| loc.id}
+      @eggs=@eggs.where(location_id: loc_ids)
     end
 
     def check_eggs_of_other_users

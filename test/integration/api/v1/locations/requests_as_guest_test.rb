@@ -61,7 +61,7 @@ class Api::V1::LocationRequestsAsGuestTest < Api::V1::RequestsTest
     location=locations(:olomouc)
 
     by_https { get api_path_to("/locations/#{location.id}"), nil, nil }
-    debug_response
+
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
     assert_equal location.name, response_json['name']

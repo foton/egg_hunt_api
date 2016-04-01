@@ -9,6 +9,7 @@ class Coordinate < ActiveRecord::Base
     else  
       super
     end
+    raise "Wrong coordinate created #{args}: #{self.to_yaml}" if self.latitude_number.blank? || self.latitude_hemisphere.blank? || self.longitude_number.blank? || self.longitude_hemisphere.blank? 
   end  
 
   def to_s
@@ -24,10 +25,10 @@ class Coordinate < ActiveRecord::Base
   end  
 
   def long_hem
-    longitude_hemisphere.upcase
+    longitude_hemisphere.to_s.upcase
   end  
 
   def lat_hem
-    latitude_hemisphere.upcase
+    latitude_hemisphere.to_s.upcase
   end  
 end

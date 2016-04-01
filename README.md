@@ -342,7 +342,7 @@ For all indexes you can limit records which are returned
 * `city=something` => city begins with 'something'
 * `description=something` => description begins with 'something'
 * `user_id=5` => only locations which belongs to user with id 5
-* `area_tl=56.0N,0.3W&area_br=51.5N,9.5E` => only locations which have theirs TL or BR coordinates in this area (so TL corner or BR corner must overlap desired area; I am working on full coverage)
+* `area_tl=56.0N,0.3W&area_br=51.5N,9.5E` => only locations which are (even partially) overlaped by area
 
 
 ###Eggs index filters
@@ -361,5 +361,5 @@ For all indexes you can limit records which are returned
 * `updated_at<2015-03-03T08:08:08Z` only eggs updated before this UTC time
 * `user_id=5` => only eggs which belongs to user with id 5
 * `location_id=3` => only eggs from locations with id 3
-* `area_tl=56.0N,0.3W&area_br=51.5N,9.5E` => only eggs from locations which have theirs TL or BR coordinates in this area (so TL corner or BR corner must overlap desired area; I am working on full coverage)
+* `area_tl=56.0N,0.3W&area_br=51.5N,9.5E` => only eggs from locations which are (even partially) overlaped by area
 
