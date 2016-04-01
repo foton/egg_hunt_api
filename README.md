@@ -329,12 +329,14 @@ For all indexes you can limit records which are returned
 
 ###User index filters
 **sort** by any attribute ("-attr" means descending order, "+attr" or "attr" means ascending order)
+
 **search** 
 * `email=something` => address begins with 'something'
 * `admin=true` (  'true' | 1  => `true` ; 'false' | 0 => `false`)
 
 ###Location index filters
 **sort** by any attribute ("-attr" means descending order, "+attr" or "attr" means ascending order)
+
 **search** 
 * `name=something` => name begins with 'something'
 * `city=something` => city begins with 'something'
@@ -345,17 +347,18 @@ For all indexes you can limit records which are returned
 
 ###Eggs index filters
 **sort** by any attribute ("-attr" means descending order, "+attr" or "attr" means ascending order)
+
 **search** 
 * `name=something` => name begins with 'something'
 * `size=1` => egg size is equal to 1
 * `size>3` => egg size is greater then 3
 * `size<3` => egg size is less then 3
-* `created_at=2015-03-03T08:08:08Z` only eggs created at this time
-* `created_at>2015-03-03T08:08:08Z` only eggs created after this time
-* `created_at<2015-03-03T08:08:08Z` only eggs created before this time
-* `updated_at=2015-03-03T08:08:08Z` only eggs updated at this time
-* `updated_at>2015-03-03T08:08:08Z` only eggs updated after this time
-* `updated_at<2015-03-03T08:08:08Z` only eggs updated before this time
+* `created_at=2015-03-03T08:08:08Z` only eggs created at this UTC time
+* `created_at>2015-03-03T08:08:08Z` only eggs created after this UTC time
+* `created_at<2015-03-03T08:08:08Z` only eggs created before this UTC time
+* `updated_at=2015-03-03T08:08:08Z` only eggs updated at this UTC time
+* `updated_at>2015-03-03T08:08:08Z` only eggs updated after this UTC time
+* `updated_at<2015-03-03T08:08:08Z` only eggs updated before this UTC time
 * `user_id=5` => only eggs which belongs to user with id 5
 * `location_id=3` => only eggs from locations with id 3
 * `area_tl=56.0N,0.3W&area_br=51.5N,9.5E` => only eggs from locations which have theirs TL or BR coordinates in this area (so TL corner or BR corner must overlap desired area; I am working on full coverage)
