@@ -168,8 +168,8 @@ Index of locations:
         "city":"London",
         "description":null,
         "user_id":2,
-        "top_left_coordinate_id":1,
-        "bottom_right_coordinate_id":2,
+        "top_left_coordinate_str": "51.5118883N, 0.1905369W",
+        "bottom_right_coordinate_id": ""51.5028867N, 0.1512694W",
         "created_at":"2016-03-31T22:43:33.956+02:00",
         "updated_at":"2016-03-31T22:43:33.956+02:00"
       },
@@ -179,8 +179,8 @@ Index of locations:
         "city":"Olomouc",
         "description":"Metropolis of Haná",
         "user_id":2,
-        "top_left_coordinate_id":3,
-        "bottom_right_coordinate_id":4,
+        "top_left_coordinate_id":"49.6124894N, 17.2159669E",
+        "bottom_right_coordinate_id":"49.5604067N, 17.3100375E",
         "created_at":"2016-03-31T22:43:33.967+02:00",
         "updated_at":"2016-03-31T22:43:33.967+02:00"
       }
@@ -203,8 +203,8 @@ Creating location (HTTP method POST):
         "city":"Olomouc",
         "description":null,
         "user_id":2,
-        "top_left_coordinate_id":5,
-        "bottom_right_coordinate_id":6,
+        "top_left_coordinate_str":"49.6124894N, 17.2159669E",
+        "bottom_right_coordinate_str":"49.5604067N, 17.3100375E",
         "created_at":"2016-03-31T23:43:33.893+02:00",
         "updated_at":"2016-03-31T23:43:33.893+02:00"
       }
@@ -301,19 +301,62 @@ Atributtes of `egg` available to modification:
 `user_id` is automagically added according to current user who created the egg.
 
 
-### Indexes
+##Returned fields
+You can choose which fields of resource(s) will be in response by `fields` param in URL (see example in **Indexes of resources**)
+
+
+## Indexes of resources
 All indexes have ability to sort, limit, search/filter objects and limit returned fields.
+
+For example:
 
     .../eggs.json?sort=-size,+name&name=Kr&created_at>2001-01-01T8:00:00Z&size<5&offset=5&limit=10&fields=id,size,name,location_id
 
 will 
 
 * select only eggs 
-  *newer than 1.1.2001 8:00 UTC
-  *smaller then 5
-  *with name starting on "Kr"
-*pick only 5 to 15th record
-*return only `id`,`size`,`name`,`location_id` attributes
-*sort result by `size` "desc" and `name` "asc"
+  * newer than 1.1.2001 8:00 UTC
+  * smaller then 5
+  * with name starting on "Kr"
+* pick only 5 to 15th record
+* return only `id`,`size`,`name`,`location_id` attributes
+* sort result by `size` "desc" and `name` "asc"
 
-Until I write here which attributes can be used for what, You can experiment :-)
+For all indexes you can limit records which are returned
+* `limit=11` => only 11 records is returned
+* `offset=5` => selection start at 5th record
+
+
+###User index filters
+**sort** by any attribute ("-attr" means descending order, "+attr" or "attr" means ascending order)
+**search** 
+* `email=something` => address begins with 'something'
+* `admin=true` (  'true' | 1  => `true` ; 'false' | 0 => `false`)
+
+###Location index filters
+**sort** by any attribute ("-attr" means descending order, "+attr" or "attr" means ascending order)
+**search** 
+* `name=something` => name begins with 'something'
+* `city=something` => city begins with 'something'
+* `description=something` => description begins with 'something'
+* `user_id=5` => only locations which belongs to user with id 5
+* `area_tl=56.0N,0.3W&area_br=51.5N,9.5E` => only locations which have theirs TL or BR coordinates in this area (so TL corner or BR corner must overlap desired area; I am working on full coverage)
+
+
+###Eggs index filters
+**sort** by any attribute ("-attr" means descending order, "+attr" or "attr" means ascending order)
+**search** 
+* `name=something` => name begins with 'something'
+* `size=1` => egg size is equal to 1
+* `size>3` => egg size is greater then 3
+* `size<3` => egg size is less then 3
+* `created_at=2015-03-03T08:08:08Z` only eggs created at this time
+* `created_at>2015-03-03T08:08:08Z` only eggs created after this time
+* `created_at<2015-03-03T08:08:08Z` only eggs created before this time
+* `updated_at=2015-03-03T08:08:08Z` only eggs updated at this time
+* `updated_at>2015-03-03T08:08:08Z` only eggs updated after this time
+* `updated_at<2015-03-03T08:08:08Z` only eggs updated before this time
+* `user_id=5` => only eggs which belongs to user with id 5
+* `location_id=3` => only eggs from locations with id 3
+* `area_tl=56.0N,0.3W&area_br=51.5N,9.5E` => only eggs from locations which have theirs TL or BR coordinates in this area (so TL corner or BR corner must overlap desired area; I am working on full coverage)
+
