@@ -7,7 +7,7 @@ class Api::V1::EggRequestsAsGuestTest < Api::V1::RequestsTest
   
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
-    assert_equal 5, response_json.size
+    assert_equal 6, response_json.size
     assert_equal Egg.all.to_json, response.body
   end
 
@@ -25,7 +25,7 @@ class Api::V1::EggRequestsAsGuestTest < Api::V1::RequestsTest
 
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
-    assert_equal 5, response_json.size
+    assert_equal 6, response_json.size
     assert_equal Egg.order("size DESC, created_at DESC").to_json, response.body
   end
 
@@ -34,7 +34,7 @@ class Api::V1::EggRequestsAsGuestTest < Api::V1::RequestsTest
 
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
-    assert_equal 5, response_json.size
+    assert_equal 6, response_json.size
     assert_equal Egg.all.to_json(only: [:name, :created_at]), response.body
   end
 
@@ -65,7 +65,7 @@ class Api::V1::EggRequestsAsGuestTest < Api::V1::RequestsTest
 
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
-    assert_equal 4, response_json.size
+    assert_equal 5, response_json.size
     assert_equal Egg.where("created_at > ?", "2015-03-03T08:08:08Z").to_json, response.body
   end
 

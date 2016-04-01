@@ -33,3 +33,15 @@ legoland_br:
   longitude_number: 9.1300914
   latitude_hemisphere: "N"
   longitude_hemisphere: "E"
+
+prostejov_lt:
+  latitude_number: 49.4867558
+  longitude_number: 17.0759433
+  latitude_hemisphere: "N"
+  longitude_hemisphere: "E"
+
+prostejov_br:
+  latitude_number: 49.4561911
+  longitude_number: 17.1507878
+  latitude_hemisphere: "N"
+  longitude_hemisphere: "E"

@@ -31,3 +31,8 @@ kinder_surprise:
   location: hyde_park
   user: bunny1
 
+jeany_egg:
+  size: 6
+  name: sewed in Prostějov
+  location: prostejov
+  user: admin

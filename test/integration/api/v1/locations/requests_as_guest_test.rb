@@ -7,7 +7,7 @@ class Api::V1::LocationRequestsAsGuestTest < Api::V1::RequestsTest
 
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
-    assert_equal 3, response_json.size
+    assert_equal 4, response_json.size
     assert_equal to_response_json(Location.all), response.body
   end
 
@@ -25,7 +25,7 @@ class Api::V1::LocationRequestsAsGuestTest < Api::V1::RequestsTest
 
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
-    assert_equal 3, response_json.size
+    assert_equal 4, response_json.size
     assert_equal to_response_json(Location.order("city DESC, name ASC")), response.body
   end
 
@@ -34,7 +34,7 @@ class Api::V1::LocationRequestsAsGuestTest < Api::V1::RequestsTest
 
     assert_response :ok
     assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
-    assert_equal 3, response_json.size
+    assert_equal 4, response_json.size
     assert_equal to_response_json(Location.all,{only: [:city,:name]}), response.body
   end
 

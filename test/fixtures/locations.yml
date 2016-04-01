@@ -23,3 +23,11 @@ legoland:
   city: Billund
   description: Home of bricks
   user: bunny2
+
+prostejov:
+  name: Prostějov
+  top_left_coordinate: prostejov_tl
+  bottom_right_coordinate: prostejov_br
+  city: Prostějov
+  description: 
+  user: admin  
