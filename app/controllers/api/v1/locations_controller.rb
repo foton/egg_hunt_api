@@ -2,11 +2,13 @@ class Api::V1::LocationsController < Api::V1::ApiController
   
   def index
     load_locations
+    restrict_fields
     respond_with(@locations)
   end
   
   def show
     load_location
+    restrict_fields
     respond_with(@location)
   end
 
@@ -45,7 +47,6 @@ class Api::V1::LocationsController < Api::V1::ApiController
         sort_locations
         filter_locations
         limit_locations
-        restrict_fields
       end  
       @locations
     end
@@ -128,14 +129,15 @@ class Api::V1::LocationsController < Api::V1::ApiController
  
     #restrict returned attributes according to "fields=name,description"
     def restrict_fields
-
-      allowed_fields=Location.new.attributes.keys
+      allowed_fields=Location.new.attributes.keys+["top_left_coordinate_str", "bottom_right_coordinate_str"]-["top_left_coordinate_id", "bottom_right_coordinate_id"]
       @fields=allowed_fields & (params[:fields] || "").split(",")
+      
       if @fields.present?
         @locations=@locations.select(@fields) 
       else
         @fields=allowed_fields
       end  
+
     end  
     
     #get all known coordinates which are in this area and scope locations to ones which use them

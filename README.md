@@ -307,6 +307,7 @@ All indexes have ability to sort, limit, search/filter objects and limit returne
     .../eggs.json?sort=-size,+name&name=Kr&created_at>2001-01-01T8:00:00Z&size<5&offset=5&limit=10&fields=id,size,name,location_id
 
 will 
+
 * select only eggs 
   *newer than 1.1.2001 8:00 UTC
   *smaller then 5

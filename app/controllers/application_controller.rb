@@ -129,7 +129,7 @@ class ApplicationController < ActionController::Base
           if object_s.respond_to?(:errors) && !object_s.errors.empty?
             render(request.format.to_sym => {errors: object_s.errors}, :status => :unprocessable_entity)
           else  
-            render({request.format.to_sym => object_s, :only => @fields}.merge(header_params))
+            render({request.format.to_sym => object_s, :only => @fields, :methods => @fields}.merge(header_params))
           end  
         }
       end
